@@ -1,5 +1,6 @@
 package com.digital.bank.service;
 
+import com.digital.bank.component.AccountStatementComponent;
 import com.digital.bank.component.TransactionComponent;
 import com.digital.bank.endpoint.rest.mapper.TransactionMapper;
 import com.digital.bank.model.Account;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -74,5 +76,13 @@ public class AccountService {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public List<AccountStatementComponent> generateAccountStatement(String id, LocalDate startDate, LocalDate endDate){
+      try {
+          return this.repository.generateAccountStatement(id, startDate, endDate);
+      } catch (SQLException e) {
+          throw new RuntimeException(e);
+      }
   }
 }
