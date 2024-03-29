@@ -41,7 +41,6 @@ public class TransactionService {
   public List<Transaction> createOrUpdateTransactions(List<Transaction> transactions) {
     try {
       List<Transaction> result = new ArrayList<>();
-
       for (Transaction transaction : transactions) {
         if (transaction.getTransactionType() == TransactionType.EXPENSE) {
           Double currentAccountBalanceAmount =
@@ -121,7 +120,6 @@ public class TransactionService {
                 .amount(updatedBalance)
                 .balanceDatetime(Instant.now())
                 .build());
-
     return saved;
   }
 
