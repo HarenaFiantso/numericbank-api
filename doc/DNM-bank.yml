@@ -138,6 +138,26 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
+  /account/{id}/transaction:
+    get:
+      summary: Get all the transactions of an account
+      tags:
+        - Account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully got all the transactions of given account
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
   /balance:
     get:
       summary: Retrieve all balances

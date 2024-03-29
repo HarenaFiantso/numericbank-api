@@ -22,9 +22,21 @@ public class TransactionRepository extends DreamReflectRepository<Transaction> {
         this.connection = connection;
     }
 
-    public List<Transaction> getLastTransactionOfAccount(String accountId) throws SQLException{
+    public List<Transaction> getTransactionsOfAccount(String accountId, Integer limit) throws SQLException{
         List<Transaction> result = new ArrayList<>();
-        String sql = "SELECT * FROM \"transaction\" WHERE id_account = ? ORDER BY transaction_datetime DESC LIMIT 5";
+        String sql = "SELECT * FROM \"transaction\" WHERE id_account = ? ORDER BY transaction_datetime DESC LIMIT ?";
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setString(1, accountId);
+        statement.setInt(2, limit);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next())
+            result.add(this.mapResultSet(resultSet));
+        return result;
+    }
+
+    public List<Transaction> getTransactionsOfAccount(String accountId) throws SQLException{
+        List<Transaction> result = new ArrayList<>();
+        String sql = "SELECT * FROM \"transaction\" WHERE id_account = ? ORDER BY transaction_datetime DESC";
         PreparedStatement statement = this.connection.prepareStatement(sql);
         statement.setString(1, accountId);
         ResultSet resultSet = statement.executeQuery();

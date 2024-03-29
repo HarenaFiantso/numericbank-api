@@ -1,6 +1,7 @@
 package com.digital.bank.endpoint.rest.controller;
 
 import com.digital.bank.component.AccountComponent;
+import com.digital.bank.component.TransactionComponent;
 import com.digital.bank.endpoint.rest.mapper.AccountMapper;
 import com.digital.bank.model.Account;
 import com.digital.bank.service.AccountService;
@@ -45,5 +46,10 @@ public class AccountController {
     @DeleteMapping("/{id}")
     public AccountComponent deleteAccountById(@PathVariable String id){
         return this.mapper.toComponent(this.service.deleteAccountById(id));
+    }
+
+    @GetMapping("/{id}/transaction")
+    public List<TransactionComponent> getAllTransactionsOfAccount(@PathVariable String id){
+        return this.service.getAllTransactionsOfAccount(id);
     }
 }
