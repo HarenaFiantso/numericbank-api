@@ -8,23 +8,26 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Builder
 @Getter
 @Setter
-@Model(table = "transfer")
-public class Transfer {
+@Model(table = "transfer_group")
+public class TransferGroup {
   @Id
-  @Column(name = "id_transfer")
-  private final String idTransfer;
-
-  @NonNull
   @Column(name = "id_transfer_group")
   private final String idTransferGroup;
 
   @NonNull
-  @Column(name = "id_transaction_debit")
-  private final String idTransactionDebit;
+  @Column(name = "registration_date")
+  private final Instant registrationDate;
 
-  @Column(name = "id_transaction_credit")
-  private final String idTransactionCredit;
+  @NonNull
+  @Column(name = "effective_date")
+  private final Instant effectiveDate;
+
+  @NonNull
+  @Column(name = "label")
+  private final String label;
 }

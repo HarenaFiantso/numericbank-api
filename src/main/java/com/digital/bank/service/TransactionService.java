@@ -121,7 +121,6 @@ public class TransactionService {
                 .amount(updatedBalance)
                 .balanceDatetime(Instant.now())
                 .build());
-
     return saved;
   }
 
