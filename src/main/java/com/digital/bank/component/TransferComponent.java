@@ -1,6 +1,6 @@
 package com.digital.bank.component;
 
-import com.digital.bank.model.Transaction;
+import java.time.Instant;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,9 @@ import lombok.Setter;
 @Setter
 public class TransferComponent {
   private final String idTransfer;
-  private final String idTransferGroup;
-  private final TransactionComponent transactionDebit;
-  private final TransactionComponent transactionCredit;
+  private final Instant transferDatetime;
+  private final Double amount;
+  private final String reason;
+  private final AccountComponent accountDebit;
+  private final AccountComponent accountCredit;
 }
