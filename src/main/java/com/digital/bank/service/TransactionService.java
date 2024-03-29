@@ -3,12 +3,11 @@ package com.digital.bank.service;
 import com.digital.bank.model.*;
 import com.digital.bank.model.type.TransactionType;
 import com.digital.bank.repository.*;
-import org.springframework.stereotype.Service;
-
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionService {
@@ -52,20 +51,34 @@ public class TransactionService {
 
           Account currentAccount = this.accountRepository.getById(transaction.getIdAccount());
 
-          if (currentAccount.getOverDrafted()) {
-            currentAccountBalanceAmount += currentAccount.getMonthlySalary() / 3;
-            this.balanceRepository.save(
-                    Balance.builder()
-                            .amount(currentAccountBalanceAmount)
-                            .balanceDatetime(Instant.now())
-                            .idAccount(currentAccount.getIdAccount())
-                            .build()
-            );
-            this.giveOverdraftDebtToAccount(currentAccount);
-          }
+          if (currentAccountBalanceAmount < transaction.getAmount()) {
+            if (currentAccount.getOverDrafted()) {
+              Double overDraftedBalance =
+                  currentAccountBalanceAmount + currentAccount.getMonthlySalary() / 3;
+              this.balanceRepository.save(
+                  Balance.builder()
+                      .amount(overDraftedBalance)
+                      .balanceDatetime(Instant.now())
+                      .idAccount(currentAccount.getIdAccount())
+                      .build());
+              this.giveOverdraftDebtToAccount(currentAccount);
 
-          if (currentAccountBalanceAmount < transaction.getAmount())
-            throw new RuntimeException("Your balance is insufficient for this transaction");
+              this.accountRepository.save(
+                  Account.builder()
+                      .idAccount(currentAccount.getIdAccount())
+                      .firstName(currentAccount.getFirstName())
+                      .lastName(currentAccount.getLastName())
+                      .birthDate(currentAccount.getBirthDate())
+                      .monthlySalary(currentAccount.getMonthlySalary())
+                      .overDrafted(false)
+                      .build());
+
+              if (overDraftedBalance < transaction.getAmount())
+                throw new RuntimeException("Your balance is insufficient for this transaction");
+            } else {
+              throw new RuntimeException("Your balance is insufficient for this transaction");
+            }
+          }
         }
 
         Transaction saved = this.applyTransactionToAccount(transaction);
