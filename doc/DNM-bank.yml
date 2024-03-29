@@ -28,7 +28,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/accounts'
+                $ref: '#/components/schemas/AccountComponent'
         400:
           $ref: '#/components/responses/400'
         500:
@@ -98,12 +98,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/accounts'
+                $ref: '#/components/schemas/AccountComponent'
               example:
                 - firstName: "Daww"
                   lastName: "Face"
                   birthDate: "2006-08-02"
                   monthlySalary: 50000.0
+                  overDrafted: false
+                  transactions: [ 2000,4000 ]
+                  balance: { 6000 }
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -127,7 +130,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/accounts'
+                $ref: '#/components/schemas/AccountComponent'
               example:
                 - firstName: "Daww"
                   lastName: "Face"
@@ -156,7 +159,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/TransactionComponent'
 
   /balance:
     get:
@@ -170,7 +173,7 @@ paths:
             application/json:
               schema:
                 items:
-                  - $ref: '#/components/schemas/balance'
+                   $ref: '#/components/schemas/balance'
                 example:
                 - balanceId: "fa5new-b4nce-id-784"
                   accountId: "uuua-65ada-ea45-aks"
@@ -370,7 +373,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferGroup'
+              type: array
+              items:
+                $ref: '#/components/schemas/TransferGroupComponent'
       responses:
         '200':
           description: Transfer group created or updated successfully
@@ -396,11 +401,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TransferGroup'
+                  $ref: '#/components/schemas/TransferGroupComponent'
         '500':
           $ref: '#/components/responses/500'
 
-  /transfer-groups/{TransferGroupId}:
+  /transfer-groups/{id}:
     delete:
       summary: Delete a transfer group by its ID
       operationId: deleteTransferGroupById
@@ -408,7 +413,7 @@ paths:
         - TransferGroup
       parameters:
         - in: path
-          name: TransferGroupId
+          name: id
           required: true
           schema:
             type: string
@@ -419,7 +424,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transfer'
+                $ref: '#/components/schemas/TransferGroupComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -434,7 +439,7 @@ paths:
         - TransferGroup
       parameters:
         - in: path
-          name: TransferGroupId
+          name: id
           required: true
           schema:
             type: string
@@ -445,7 +450,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferGroup'
+                $ref: '#/components/schemas/TransferGroupComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -454,6 +459,29 @@ paths:
           $ref: '#/components/responses/500'
 
   /transfer:
+    post: 
+      summary: make transfer
+      operationId: makeTransfer
+      tags:
+        - Transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferComponent'
+      responses:
+        '200':
+          description: Transfer done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferComponent'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
     put:
       summary: Create or update transfers
       operationId: saveOrUpdateTransfer
@@ -490,11 +518,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transfer'
+                  $ref: '#/components/schemas/TransferComponent'
         '500':
           $ref: '#/components/responses/500'
 
-  /transfer/{transferId}:
+  /transfer/{id}:
     delete:
       summary: Delete a transfer by its ID
       operationId: deleteTransferById
@@ -502,7 +530,7 @@ paths:
         - Transfer
       parameters:
         - in: path
-          name: transferId
+          name: id
           required: true
           schema:
             type: string
@@ -513,7 +541,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transfer'
+                $ref: '#/components/schemas/TransferComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -528,7 +556,7 @@ paths:
         - Transfer
       parameters:
         - in: path
-          name: transferId
+          name: id
           required: true
           schema:
             type: string
@@ -539,7 +567,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transfer'
+                $ref: '#/components/schemas/TransferComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -561,7 +589,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/TransactionComponent'
         '500':
           $ref: '#/components/responses/500'
 
@@ -575,15 +603,17 @@ paths:
         description: if an id is provided , the transaction is updated
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/Transaction'
+             schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
       responses:
         '200':
           description: Transaction created or updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/TransactionComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -610,7 +640,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/TransactionComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -636,7 +666,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/TransactionComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -658,7 +688,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/debt'
+                  $ref: '#/components/schemas/debtComponent'
         '500':
           $ref: '#/components/responses/500'
 
@@ -673,14 +703,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/debt'
+              type: array
+              items:
+                $ref: '#/components/schemas/debt'
       responses:
         '200':
           description: debt created or updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/debt'
+                $ref: '#/components/schemas/debtComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -707,7 +739,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/debt'
+                $ref: '#/components/schemas/debtComponent'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -1100,6 +1132,82 @@ components:
       required:
         - amount
         - idAccount
+
+    debtComponent:
+      type: object
+      properties:
+        idDebt:
+          type: string
+          description:  id of the debt.
+        amount:
+          type: number
+          format: double
+        debtDatetime:
+          type: string
+          format: date-time
+        account:
+            $ref: '#/components/schemas/accounts'
+        interestRate:
+            $ref: '#/components/schemas/InterestRate'
+
+    TransactionComponent:
+      type: object
+      properties:
+        idTransaction:
+          type: string
+        transactionType:
+          type: string
+          enum:
+            - EXPENSE
+            - INCOME
+        amount:
+          type: number
+          format: double
+        reason: 
+          type: string
+          description: reason of the transaction(description)
+        account:
+          $ref: '#/components/schemas/accounts'
+        transfer:
+          $ref: '#/components/schemas/Transfer'
+        transactionCategory:
+          $ref: '#/components/schemas/TransactionCategory'
+
+    TransferComponent:
+      type: object
+      properties:
+        idTransfer:
+          type: string
+        tranferDatetime:
+          type: string
+          format: date-time
+        amount:
+          type: number
+          format: double
+        reason:
+          type: string
+          description: reason of the transfer(description)
+        accountDebit:
+          $ref: '#/components/schemas/AccountComponent'
+        accountCredit:
+          $ref: '#/components/schemas/AccountComponent'
+
+    TransferGroupComponent:
+      type: object
+      properties:
+        idTransferGroup:
+          type: string
+        registrationDate:
+          type: string
+          format: date-time
+        effectiveDate:
+          type: string
+          format: date-time
+        label:
+          type: string
+        transfers: 
+          type: array
+          $ref: '#/components/schemas/TransferComponent'
 
     Exception:
       type: object
