@@ -1,18 +1,22 @@
 package com.digital.bank.service;
 
+import com.digital.bank.component.TransferComponent;
 import com.digital.bank.model.TransferGroup;
 import com.digital.bank.repository.TransferGroupRepository;
-import org.springframework.stereotype.Service;
-
+import com.digital.bank.repository.TransferRepository;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TransferGroupService {
-  public final TransferGroupRepository repository;
+  private final TransferGroupRepository repository;
+  private final TransferService transferService;
 
-  public TransferGroupService(TransferGroupRepository repository) {
+  public TransferGroupService(TransferGroupRepository repository, TransferService transferService) {
     this.repository = repository;
+    this.transferService = transferService;
   }
 
   public List<TransferGroup> getAllTransferGroups() {
@@ -23,12 +27,13 @@ public class TransferGroupService {
     }
   }
 
-  public List<TransferGroup> createOrUpdateTransferGroups(List<TransferGroup> transferGroups) {
-    try {
-      return this.repository.saveAll(transferGroups);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
+  public List<TransferComponent> createOrUpdateTransferGroups(List<TransferComponent> transfers) {
+    List<TransferComponent> results = new ArrayList<>();
+    for (TransferComponent transfer : transfers) {
+      TransferComponent madeTransfer = this.transferService.makeTransfer(transfer);
+      results.add(madeTransfer);
     }
+    return results;
   }
 
   public TransferGroup getTransferGroupById(String id) {

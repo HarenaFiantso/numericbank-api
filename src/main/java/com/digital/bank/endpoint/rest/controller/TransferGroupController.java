@@ -1,14 +1,12 @@
 package com.digital.bank.endpoint.rest.controller;
 
+import com.digital.bank.component.TransferComponent;
 import com.digital.bank.component.TransferGroupComponent;
 import com.digital.bank.endpoint.rest.mapper.TransferGroupMapper;
-import com.digital.bank.model.TransferGroup;
-import com.digital.bank.repository.TransferGroupRepository;
 import com.digital.bank.service.TransferGroupService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/transfer-group")
@@ -28,12 +26,10 @@ public class TransferGroupController {
         .collect(Collectors.toList());
   }
 
-  @PutMapping
-  public List<TransferGroupComponent> createOrUpdateTransferGroups(
-      @RequestBody List<TransferGroup> toSave) {
-    return this.service.createOrUpdateTransferGroups(toSave).stream()
-        .map(this.mapper::toComponent)
-        .collect(Collectors.toList());
+  @PostMapping("")
+  public List<TransferComponent> createOrUpdateTransferGroups(
+      @RequestBody List<TransferComponent> toSave) {
+    return this.service.createOrUpdateTransferGroups(toSave);
   }
 
   @GetMapping("/{id}")
