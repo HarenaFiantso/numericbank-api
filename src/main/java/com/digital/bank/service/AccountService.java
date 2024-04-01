@@ -2,6 +2,8 @@ package com.digital.bank.service;
 
 import com.digital.bank.component.AccountStatementComponent;
 import com.digital.bank.component.TransactionComponent;
+import com.digital.bank.component.dashboard.AccountTotalIncomeExpenseComponent;
+import com.digital.bank.component.dashboard.AccountTransactionByCategoryComponent;
 import com.digital.bank.endpoint.rest.mapper.TransactionMapper;
 import com.digital.bank.model.Account;
 import com.digital.bank.model.Balance;
@@ -58,6 +60,14 @@ public class AccountService {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public List<AccountTransactionByCategoryComponent> getTransactionsByCategoryAndAccountId(String accountId, LocalDate startDate, LocalDate endDate) throws SQLException {
+    return this.repository.getTransactionsByCategoryAndAccountId(accountId, startDate, endDate);
+  }
+
+  public List<AccountTotalIncomeExpenseComponent> getIncomeExpenseTotalsByAccount(String accountId, LocalDate startDate, LocalDate endDate, boolean groupByDay) throws SQLException {
+    return this.repository.getIncomeExpenseTotalsByAccount(accountId, startDate, endDate, groupByDay);
   }
 
   public Account deleteAccountById(String id) {
