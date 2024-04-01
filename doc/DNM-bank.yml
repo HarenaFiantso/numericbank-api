@@ -989,6 +989,9 @@ components:
         balance:
           $ref: '#/components/schemas/balance'
           description: The current balance of the account.
+        debt:
+          $ref: '#/components/schemas/debtComponent'
+          description: The current debt of the account
 
 
     balance:

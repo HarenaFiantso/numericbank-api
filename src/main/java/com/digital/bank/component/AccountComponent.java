@@ -17,6 +17,7 @@ public class AccountComponent {
     private final Date birthDate;
     private final Double monthlySalary;
     private final Boolean overDrafted;
-    private final List<Transaction> transactions;
+    private final List<TransactionComponent> transactions;
     private final Balance balance;
+    private final DebtComponent debt;
 }
