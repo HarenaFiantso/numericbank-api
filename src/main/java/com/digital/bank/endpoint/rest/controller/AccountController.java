@@ -3,11 +3,14 @@ package com.digital.bank.endpoint.rest.controller;
 import com.digital.bank.component.AccountComponent;
 import com.digital.bank.component.AccountStatementComponent;
 import com.digital.bank.component.TransactionComponent;
+import com.digital.bank.component.dashboard.AccountTotalIncomeExpenseComponent;
+import com.digital.bank.component.dashboard.AccountTransactionByCategoryComponent;
 import com.digital.bank.endpoint.rest.mapper.AccountMapper;
 import com.digital.bank.model.Account;
 import com.digital.bank.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,5 +62,22 @@ public class AccountController {
       @RequestParam LocalDate startDate,
       @RequestParam LocalDate endDate) {
       return  this.service.generateAccountStatement(id, startDate, endDate);
+  }
+
+  @GetMapping("/transactions/by-category")
+  public List<AccountTransactionByCategoryComponent> getTransactionsByCategoryAndAccountId(
+          @RequestParam String accountId,
+          @RequestParam LocalDate startDate,
+          @RequestParam LocalDate endDate) throws SQLException {
+    return this.service.getTransactionsByCategoryAndAccountId(accountId, startDate, endDate);
+  }
+
+  @GetMapping("/income-expense/totals")
+  public List<AccountTotalIncomeExpenseComponent> getIncomeExpenseTotalsByAccount(
+          @RequestParam String accountId,
+          @RequestParam LocalDate startDate,
+          @RequestParam LocalDate endDate,
+          @RequestParam(required = false, defaultValue = "false") boolean groupByDay) throws SQLException {
+    return this.service.getIncomeExpenseTotalsByAccount(accountId, startDate, endDate, groupByDay);
   }
 }
