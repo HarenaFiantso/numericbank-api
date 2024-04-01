@@ -10,6 +10,8 @@ import com.digital.bank.repository.DebtRepository;
 import com.digital.bank.repository.TransactionRepository;
 import java.sql.SQLException;
 import java.util.List;
+
+import com.digital.bank.service.DebtService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,7 @@ public class AccountMapper {
   private final TransactionRepository transactionRepository;
   private final BalanceRepository balanceRepository;
   private final TransactionMapper transactionMapper;
-  private final DebtRepository debtRepository;
+  private final DebtService debtService;
   private final DebtMapper debtMapper;
 
   public AccountComponent toComponent(Account account) {
@@ -30,7 +32,7 @@ public class AccountMapper {
           this.transactionRepository.getTransactionsOfAccount(account.getIdAccount(), 5);
       Balance currentBalance =
           this.balanceRepository.getCurrentBalanceOfAccount(account.getIdAccount());
-      Debt currentDebt = this.debtRepository.getCurrentDebtOfAccount(account.getIdAccount());
+      Debt currentDebt = this.debtService.getCurrentDebt(account.getIdAccount());
 
       return AccountComponent.builder()
           .idAccount(account.getIdAccount())
