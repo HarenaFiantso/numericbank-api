@@ -6,6 +6,7 @@ import com.digital.bank.model.*;
 import com.digital.bank.model.type.TransactionType;
 import com.digital.bank.repository.*;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -84,7 +85,7 @@ public class TransferService {
           this.transferGroupRepository.save(
               TransferGroup.builder()
                   .label(debitTransaction.getReason())
-                  .registrationDate(debitTransaction.getTransactionDatetime())
+                  .registrationDate(Instant.now())
                   .effectiveDate(debitTransaction.getTransactionDatetime())
                   .build());
 

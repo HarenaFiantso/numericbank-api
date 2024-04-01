@@ -4,10 +4,8 @@ import com.digital.bank.model.Balance;
 import com.digital.bank.util.drr.utility.DreamReflectRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 
 @Repository
 public class BalanceRepository extends DreamReflectRepository<Balance> {
@@ -19,9 +17,10 @@ public class BalanceRepository extends DreamReflectRepository<Balance> {
     }
 
     public Balance getCurrentBalanceOfAccount(String accountId) throws SQLException{
-        String sql = "SELECT * FROM \"balance\" WHERE id_account = ? ORDER BY balance_datetime DESC LIMIT 1";
+        String sql = "SELECT * FROM \"balance\" WHERE id_account = ? AND balance_datetime <= ? ORDER BY balance_datetime DESC LIMIT 1";
         PreparedStatement statement = this.connection.prepareStatement(sql);
         statement.setString(1, accountId);
+        statement.setTimestamp(2, Timestamp.from(Instant.now()));
         ResultSet resultSet = statement.executeQuery();
         if(!resultSet.next())
             return null;
