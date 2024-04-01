@@ -1,5 +1,6 @@
 package com.digital.bank.service;
 
+import com.digital.bank.component.TransferBodyComponent;
 import com.digital.bank.component.TransferComponent;
 import com.digital.bank.endpoint.rest.mapper.AccountMapper;
 import com.digital.bank.model.*;
@@ -25,7 +26,7 @@ public class TransferService {
   private final TransactionRepository transactionRepository;
   private final TransactionCategoryRepository transactionCategoryRepository;
 
-  public TransferComponent makeTransfer(TransferComponent toMake) {
+  public TransferComponent makeTransfer(TransferBodyComponent toMake) {
     try {
       TransferComponent.TransferComponentBuilder resultBuilder = TransferComponent.builder();
 
@@ -38,7 +39,7 @@ public class TransferService {
               .reason(toMake.getReason())
               .transactionType(TransactionType.EXPENSE)
               .transactionDatetime(toMake.getTransferDatetime())
-              .idAccount(toMake.getAccountDebit().getIdAccount())
+              .idAccount(toMake.getIdDebitAccount())
               .idTransactionCategory(transactionCategory.getIdTransactionCategory());
 
       Transaction.TransactionBuilder creditTransactionBuilder =
@@ -49,20 +50,20 @@ public class TransferService {
               .transactionDatetime(toMake.getTransferDatetime())
               .idTransactionCategory(transactionCategory.getIdTransactionCategory());
 
-      if(toMake.getAccountCredit() != null)
-        creditTransactionBuilder.idAccount(toMake.getAccountCredit().getIdAccount());
+      if(toMake.getIdCreditAccount() != null)
+        creditTransactionBuilder.idAccount(toMake.getIdCreditAccount());
 
       List<Transaction> savedTransactions =
           this.transactionService.createOrUpdateTransactions(
               Stream.of(
                       debitTransactionBuilder.build(),
-                      toMake.getAccountCredit() != null ? creditTransactionBuilder.build() : null)
+                      toMake.getIdCreditAccount() != null ? creditTransactionBuilder.build() : null)
                   .filter(Objects::nonNull)
                   .collect(Collectors.toList()));
 
       Transaction debitTransaction = savedTransactions.get(0);
       Transaction creditTransaction =
-          toMake.getAccountCredit() != null ? savedTransactions.get(1) : null;
+          toMake.getIdCreditAccount() != null ? savedTransactions.get(1) : null;
 
       Transfer.TransferBuilder transferBuilder = Transfer.builder();
 

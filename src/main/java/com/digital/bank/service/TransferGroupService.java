@@ -1,5 +1,6 @@
 package com.digital.bank.service;
 
+import com.digital.bank.component.TransferBodyComponent;
 import com.digital.bank.component.TransferComponent;
 import com.digital.bank.model.TransferGroup;
 import com.digital.bank.repository.TransferGroupRepository;
@@ -27,9 +28,9 @@ public class TransferGroupService {
     }
   }
 
-  public List<TransferComponent> createOrUpdateTransferGroups(List<TransferComponent> transfers) {
+  public List<TransferComponent> createOrUpdateTransferGroups(List<TransferBodyComponent> transfers) {
     List<TransferComponent> results = new ArrayList<>();
-    for (TransferComponent transfer : transfers) {
+    for (TransferBodyComponent transfer : transfers) {
       TransferComponent madeTransfer = this.transferService.makeTransfer(transfer);
       results.add(madeTransfer);
     }

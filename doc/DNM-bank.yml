@@ -469,7 +469,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferComponent'
+              $ref: '#/components/schemas/TransferBodyComponent'
       responses:
         '200':
           description: Transfer done
@@ -1211,6 +1211,27 @@ components:
         transfers: 
           type: array
           $ref: '#/components/schemas/TransferComponent'
+
+    TransferBodyComponent:
+      type: object
+      properties:
+        amount:
+          type: number
+        transferDatetime:
+          type: string
+          format: date-time
+        reason:
+          type: string
+        idDebitAccount:
+          type: string
+        idCreditAccount:
+          type: string
+      required:
+        - amount
+        - transferDatetime
+        - reason
+        - idDebitAccount
+
 
     Exception:
       type: object

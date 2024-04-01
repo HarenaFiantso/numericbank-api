@@ -1,5 +1,6 @@
 package com.digital.bank.endpoint.rest.controller;
 
+import com.digital.bank.component.TransferBodyComponent;
 import com.digital.bank.component.TransferComponent;
 import com.digital.bank.component.TransferGroupComponent;
 import com.digital.bank.endpoint.rest.mapper.TransferGroupMapper;
@@ -28,7 +29,7 @@ public class TransferGroupController {
 
   @PostMapping("")
   public List<TransferComponent> createOrUpdateTransferGroups(
-      @RequestBody List<TransferComponent> toSave) {
+      @RequestBody List<TransferBodyComponent> toSave) {
     return this.service.createOrUpdateTransferGroups(toSave);
   }
 
