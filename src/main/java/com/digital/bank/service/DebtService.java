@@ -53,24 +53,24 @@ public class DebtService {
   public Debt getCurrentDebt(String idAccount) {
     try {
       Debt currentDebt = this.repository.getCurrentDebtOfAccount(idAccount);
-      if (currentDebt != null) {
-        Date currentDate = Date.from(Instant.now());
-        Date debtDate = Date.from(currentDebt.getDebtDatetime());
-        InterestRate interestRate =
-            this.interestRateRepository.getById(currentDebt.getIdInterestRate());
-        long dayDifference = calculateDiff(debtDate, currentDate);
-        Double addedValue =
-            ((currentDebt.getAmount() * interestRate.getValue()) / 100) * dayDifference;
-        currentDebt =
-            this.repository.save(
-                Debt.builder()
-                    .amount((currentDebt.getAmount() + addedValue))
-                    .debtDatetime(Instant.now())
-                    .idInterestRate(currentDebt.getIdInterestRate())
-                    .idAccount(currentDebt.getIdAccount())
-                    .build());
+      if (currentDebt == null) {
+        return null;
       }
-      return currentDebt;
+      Date currentDate = Date.from(Instant.now());
+      Date debtDate = Date.from(currentDebt.getDebtDatetime());
+      InterestRate interestRate =
+          this.interestRateRepository.getById(currentDebt.getIdInterestRate());
+      long dayDifference = calculateDiff(debtDate, currentDate);
+      Double addedValue =
+          ((currentDebt.getAmount() * interestRate.getValue()) / 100) * dayDifference;
+      return this.repository.save(
+          Debt.builder()
+              .amount((currentDebt.getAmount() + addedValue))
+              .debtDatetime(Instant.now())
+              .idInterestRate(currentDebt.getIdInterestRate())
+              .idAccount(currentDebt.getIdAccount())
+              .build());
+
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }

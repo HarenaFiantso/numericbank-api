@@ -1,7 +1,7 @@
 openapi: '3.0.2'
 info:
   title: Dream Numeric Bank
-  version: '1.0'
+  version: '5.1.0'
 servers:
   - url: https://DNM.bank.server/v1
 tags:
@@ -160,6 +160,108 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/TransactionComponent'
+
+  /account/{id}/statement:
+    get:
+      summary: Get the statement of a given account within a given range
+      tags:
+        - Account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successfully got the account statement within the given rate
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AccountStatementComponent'
+
+  /account/{id}/transaction/by-category:
+    get:
+      summary: Get the sum of all transactions of a given account grouped by categories within a date range
+      tags:
+        - Account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successfully got the sum of all transactions of a given account grouped by categories within a date range
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AccountTransactionByCategoryComponent'
+
+  /account/{id}/transaction/income-expense:
+    get:
+      summary: Get the sum of expense and incomes of a given account within a date range
+      tags:
+        - Account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: groupByDay
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Successfully got the sum of expense and incomes of a given account within a date range
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AccountTotalIncomeExpenseComponent'
 
   /balance:
     get:
@@ -1231,6 +1333,56 @@ components:
         - transferDatetime
         - reason
         - idDebitAccount
+
+    AccountTotalIncomeExpenseComponent:
+      type: object
+      properties:
+        transactionDate:
+          type: string
+          format: date
+        income:
+          type: number
+        expense:
+          type: number
+      required:
+        - transactionDate
+        - income
+        - expense
+
+    AccountTransactionByCategoryComponent:
+      type: object
+      properties:
+        category:
+          type: string
+        amount:
+          type: number
+      required:
+        - category
+        - amount
+
+    AccountStatementComponent:
+      type: object
+      properties:
+        transactionDate:
+          type: string
+          format: date
+        reference:
+          type: string
+        reason:
+          type: string
+        credit:
+          type: number
+        debit:
+          type: number
+        balance:
+          type: number
+      required:
+        - transactionDate
+        - reference
+        - reason
+        - credit
+        - debit
+        - balance
 
 
     Exception:

@@ -8,12 +8,11 @@ import com.digital.bank.component.dashboard.AccountTransactionByCategoryComponen
 import com.digital.bank.endpoint.rest.mapper.AccountMapper;
 import com.digital.bank.model.Account;
 import com.digital.bank.service.AccountService;
-import org.springframework.web.bind.annotation.*;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/account")
@@ -56,28 +55,26 @@ public class AccountController {
     return this.service.getAllTransactionsOfAccount(id);
   }
 
-  @GetMapping("/{id}/statement")
-  public List<AccountStatementComponent> generateAccountStatement(
+  @GetMapping("/{id}/transaction/by-category")
+  public List<AccountTransactionByCategoryComponent> getTransactionsByCategoryAndAccountId(
+      @PathVariable String id, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate)
+      throws SQLException {
+    return this.service.getTransactionsByCategoryAndAccountId(id, startDate, endDate);
+  }
+
+  @GetMapping("/{id}/transaction/income-expense")
+  public List<AccountTotalIncomeExpenseComponent> getIncomeExpenseTotalsByAccount(
       @PathVariable String id,
       @RequestParam LocalDate startDate,
-      @RequestParam LocalDate endDate) {
-      return  this.service.generateAccountStatement(id, startDate, endDate);
+      @RequestParam LocalDate endDate,
+      @RequestParam(required = false, defaultValue = "false") boolean groupByDay)
+      throws SQLException {
+    return this.service.getIncomeExpenseTotalsByAccount(id, startDate, endDate, groupByDay);
   }
 
-  @GetMapping("/transactions/by-category")
-  public List<AccountTransactionByCategoryComponent> getTransactionsByCategoryAndAccountId(
-          @RequestParam String accountId,
-          @RequestParam LocalDate startDate,
-          @RequestParam LocalDate endDate) throws SQLException {
-    return this.service.getTransactionsByCategoryAndAccountId(accountId, startDate, endDate);
-  }
-
-  @GetMapping("/income-expense/totals")
-  public List<AccountTotalIncomeExpenseComponent> getIncomeExpenseTotalsByAccount(
-          @RequestParam String accountId,
-          @RequestParam LocalDate startDate,
-          @RequestParam LocalDate endDate,
-          @RequestParam(required = false, defaultValue = "false") boolean groupByDay) throws SQLException {
-    return this.service.getIncomeExpenseTotalsByAccount(accountId, startDate, endDate, groupByDay);
+  @GetMapping("/{id}/statement")
+  public List<AccountStatementComponent> generateAccountStatement(
+      @PathVariable String id, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+    return this.service.generateAccountStatement(id, startDate, endDate);
   }
 }
