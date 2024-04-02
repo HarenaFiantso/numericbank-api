@@ -1,12 +1,11 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: Dream Numeric Bank
-  version: '5.1.0'
+  version: "5.1.0"
 servers:
   - url: https://DNM.bank.server/v1
 tags:
   - name: Account
-  - name: Balance
   - name: TransactionCategory
   - name: TransferGroup
   - name: Transfer
@@ -28,11 +27,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountComponent'
+                $ref: "#/components/schemas/AccountComponent"
         400:
-          $ref: '#/components/responses/400'
+          $ref: "#/components/responses/400"
         500:
-          $ref: '#/components/responses/500'
+          $ref: "#/components/responses/500"
 
     put:
       summary: Create or update accounts
@@ -46,7 +45,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/accounts'
+                $ref: "#/components/schemas/accounts"
             example:
               - firstName: "Daww"
                 lastName: "Face"
@@ -55,14 +54,14 @@ paths:
                 overDrafted: true
 
       responses:
-        '200':
+        "200":
           description: Successfully created or updated accounts
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AccountComponent'
+                  $ref: "#/components/schemas/AccountComponent"
               example:
                 - idAccount: "siais-dadhad-dadjhadj-djqsd"
                   firstName: "Daww"
@@ -70,12 +69,12 @@ paths:
                   birthDate: "2006-08-02T00:00:00Z"
                   monthlySalary: 50000.0
                   overDrafted: false
-                  transactions: [ ]
-                  balance: { }
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
+                  transactions: []
+                  balance: {}
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
 
   /account/{id}:
     get:
@@ -93,26 +92,26 @@ paths:
           example:
             - accountId: "siais-dadhad-dadjhadj-djqsd"
       responses:
-        '200':
+        "200":
           description: Account retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountComponent'
+                $ref: "#/components/schemas/AccountComponent"
               example:
                 - firstName: "Daww"
                   lastName: "Face"
                   birthDate: "2006-08-02"
                   monthlySalary: 50000.0
                   overDrafted: false
-                  transactions: [ 2000,4000 ]
+                  transactions: [2000, 4000]
                   balance: { 6000 }
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
     delete:
       summary: Delete an account by its ID
@@ -125,21 +124,21 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successfully deleted account
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountComponent'
+                $ref: "#/components/schemas/AccountComponent"
               example:
                 - firstName: "Daww"
                   lastName: "Face"
                   birthDate: "2006-08-02"
                   monthlySalary: 50000.0
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
 
   /account/{id}/transaction:
     get:
@@ -153,13 +152,13 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successfully got all the transactions of given account
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/TransactionComponent'
+                  $ref: "#/components/schemas/TransactionComponent"
 
   /account/{id}/statement:
     get:
@@ -185,13 +184,13 @@ paths:
             type: string
             format: date
       responses:
-        '200':
+        "200":
           description: Successfully got the account statement within the given rate
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/AccountStatementComponent'
+                  $ref: "#/components/schemas/AccountStatementComponent"
 
   /account/{id}/transaction/by-category:
     get:
@@ -217,13 +216,13 @@ paths:
             type: string
             format: date
       responses:
-        '200':
+        "200":
           description: Successfully got the sum of all transactions of a given account grouped by categories within a date range
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/AccountTransactionByCategoryComponent'
+                  $ref: "#/components/schemas/AccountTransactionByCategoryComponent"
 
   /account/{id}/transaction/income-expense:
     get:
@@ -255,117 +254,13 @@ paths:
             type: boolean
             default: false
       responses:
-        '200':
+        "200":
           description: Successfully got the sum of expense and incomes of a given account within a date range
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/AccountTotalIncomeExpenseComponent'
-
-  /balance:
-    get:
-      summary: Retrieve all balances
-      tags:
-        - Balance
-      responses:
-        '200':
-          description: Successfully got all balances
-          content:
-            application/json:
-              schema:
-                items:
-                   $ref: '#/components/schemas/balance'
-                example:
-                - balanceId: "fa5new-b4nce-id-784"
-                  accountId: "uuua-65ada-ea45-aks"
-                  currentBalance: 500.0
-
-                - balanceId: "neadw-bdakd-id-745ad"
-                  accountId: "adkd-adi5ad-adha-da"
-                  currentBalance: 500.0
-
-    put:
-      summary: Create or update balances
-      description: This endpoint is used to create or update existing balances. It accepts an array of balance details and updates the corresponding balances in the database.
-      tags:
-        - Balance
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/balance'
-            example:
-              - amount: 1000.0
-                balanceDatetime: "2023-04-01T10:00:00Z"
-                idAccount: "siais-dadhad-dadjhadj-djqsd"
-      responses:
-        '200':
-          description: Successfully created or updated balances
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/balance'
-              example:
-                - amount: 1000.0
-                  balanceDatetime: "2023-04-01T10:00:00Z"
-                  idAccount: "siais-dadhad-dadjhadj-djqsd"
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
-
-  /balance/{balanceId}:
-    get:
-      summary: Retrieve a balance by its ID
-      operationId: getBalanceById
-      tags:
-        - Balance
-      parameters:
-        - in: path
-          name: balanceId
-          required: true
-          schema:
-            type: string
-          description: The ID of the balance to retrieve
-      responses:
-        '200':
-          description: Balance retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/balance'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
-
-    delete:
-      summary: Delete a balance
-      tags:
-        - Balance
-      parameters:
-        - in: path
-          name: balanceId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/schemas/balance'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                  $ref: "#/components/schemas/AccountTotalIncomeExpenseComponent"
 
   /transaction-category:
     get:
@@ -374,16 +269,16 @@ paths:
       tags:
         - TransactionCategory
       responses:
-        '200':
+        "200":
           description: List of transaction categories retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TransactionCategory'
-        '500':
-          $ref: '#/components/responses/500'
+                  $ref: "#/components/schemas/TransactionCategory"
+        "500":
+          $ref: "#/components/responses/500"
 
     put:
       summary: Create or update transaction categories
@@ -398,18 +293,18 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/TransactionCategory'
+                $ref: "#/components/schemas/TransactionCategory"
       responses:
-        '200':
+        "200":
           description: Transaction category created or updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionCategory'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransactionCategory"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
 
   /transaction-category/{id}:
     get:
@@ -425,18 +320,18 @@ paths:
             type: string
           description: The ID of the transaction category to retrieve
       responses:
-        '200':
+        "200":
           description: Transaction category retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionCategory'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransactionCategory"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
     delete:
       summary: Delete a transaction category by its ID
@@ -451,18 +346,18 @@ paths:
             type: string
           description: The ID of the transaction category to delete
       responses:
-        '200':
+        "200":
           description: Transaction category deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionCategory'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransactionCategory"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
   /transfer-groups:
     put:
@@ -477,18 +372,18 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/TransferGroupComponent'
+                $ref: "#/components/schemas/TransferBodyComponent"
       responses:
-        '200':
+        "200":
           description: Transfer group created or updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferGroup'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransferGroup"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
 
     get:
       summary: Retrieve all transfer groups
@@ -496,16 +391,16 @@ paths:
       tags:
         - TransferGroup
       responses:
-        '200':
+        "200":
           description: List of transfer groups retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TransferGroupComponent'
-        '500':
-          $ref: '#/components/responses/500'
+                  $ref: "#/components/schemas/TransferGroupComponent"
+        "500":
+          $ref: "#/components/responses/500"
 
   /transfer-groups/{id}:
     delete:
@@ -521,18 +416,18 @@ paths:
             type: string
           description: The ID of the transfer group to delete
       responses:
-        '200':
+        "200":
           description: Transfer group deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferGroupComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransferGroupComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
     get:
       summary: Retrieve a transfer group by its ID
@@ -547,21 +442,21 @@ paths:
             type: string
           description: The ID of the transfer group to retrieve
       responses:
-        '200':
+        "200":
           description: Transfer group retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferGroupComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransferGroupComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
   /transfer:
-    post: 
+    post:
       summary: make transfer
       operationId: makeTransfer
       tags:
@@ -571,111 +466,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferBodyComponent'
+              $ref: "#/components/schemas/TransferBodyComponent"
       responses:
-        '200':
+        "200":
           description: Transfer done
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
-
-    put:
-      summary: Create or update transfers
-      operationId: saveOrUpdateTransfer
-      tags:
-        - Transfer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Transfer'
-      responses:
-        '200':
-          description: Transfer saved or updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Transfer'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
-
-    get:
-      summary: Retrieve all transfers
-      operationId: getAllTransfers
-      tags:
-        - Transfer
-      responses:
-        '200':
-          description: List of transfers retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TransferComponent'
-        '500':
-          $ref: '#/components/responses/500'
-
-  /transfer/{id}:
-    delete:
-      summary: Delete a transfer by its ID
-      operationId: deleteTransferById
-      tags:
-        - Transfer
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: The ID of the transfer to delete
-      responses:
-        '200':
-          description: Transfer deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TransferComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
-
-    get:
-      summary: Retrieve a transfer by its ID
-      operationId: getTransferById
-      tags:
-        - Transfer
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: The ID of the transfer to retrieve
-      responses:
-        '200':
-          description: Transfer retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TransferComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransferComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
 
   /transaction:
     get:
@@ -684,16 +486,16 @@ paths:
       tags:
         - Transaction
       responses:
-        '200':
+        "200":
           description: List of transactions retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TransactionComponent'
-        '500':
-          $ref: '#/components/responses/500'
+                  $ref: "#/components/schemas/TransactionComponent"
+        "500":
+          $ref: "#/components/responses/500"
 
     put:
       summary: Create or update transactions
@@ -705,23 +507,23 @@ paths:
         description: if an id is provided , the transaction is updated
         content:
           application/json:
-             schema:
+            schema:
               type: array
               items:
-                $ref: '#/components/schemas/Transaction'
+                $ref: "#/components/schemas/Transaction"
       responses:
-        '200':
+        "200":
           description: Transaction created or updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransactionComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
   /transaction/{id}:
     get:
@@ -737,18 +539,18 @@ paths:
             type: string
           description: The ID of the transaction to retrieve
       responses:
-        '200':
+        "200":
           description: Transaction retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransactionComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
     delete:
       summary: Delete a transaction by its ID
@@ -763,36 +565,36 @@ paths:
             type: string
           description: The ID of the transaction to delete
       responses:
-        '200':
+        "200":
           description: Transaction deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/TransactionComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
-  /debt:
+  /debts:
     get:
       summary: Retrieve all debts
       operationId: getAllDebts
       tags:
         - Debt
       responses:
-        '200':
+        "200":
           description: List of debts retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/debtComponent'
-        '500':
-          $ref: '#/components/responses/500'
+                  $ref: "#/components/schemas/debtComponent"
+        "500":
+          $ref: "#/components/responses/500"
 
     put:
       summary: Create or update debt
@@ -807,20 +609,20 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/debt'
+                $ref: "#/components/schemas/debt"
       responses:
-        '200':
+        "200":
           description: debt created or updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/debtComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/debtComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
   /debts/{id}:
     delete:
@@ -836,18 +638,18 @@ paths:
             type: string
           description: The ID of the debt to delete
       responses:
-        '200':
+        "200":
           description: Debt deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/debtComponent'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/debtComponent"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
   /interest-rate:
     put:
@@ -861,18 +663,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InterestRate'
+              $ref: "#/components/schemas/InterestRate"
       responses:
-        '200':
+        "200":
           description: Interest rate created or updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InterestRate'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/InterestRate"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          $ref: "#/components/responses/500"
 
     get:
       summary: Retrieve all interest rates
@@ -880,16 +682,16 @@ paths:
       tags:
         - InterestRate
       responses:
-        '200':
+        "200":
           description: List of interest rates retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/InterestRate'
-        '500':
-          $ref: '#/components/responses/500'
+                  $ref: "#/components/schemas/InterestRate"
+        "500":
+          $ref: "#/components/responses/500"
 
   /interest-rate/{id}:
     delete:
@@ -905,18 +707,18 @@ paths:
             type: string
           description: The ID of the interest rate to delete
       responses:
-        '200':
+        "200":
           description: Interest rate deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InterestRate'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/InterestRate"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
     get:
       summary: Retrieve an interest rate by its ID
@@ -931,18 +733,19 @@ paths:
             type: string
           description: The ID of the interest rate to retrieve
       responses:
-        '200':
+        "200":
           description: Interest rate retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InterestRate'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/InterestRate"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
   /interest-rate/latest:
     get:
       summary: Retrieve the latest interest rate
@@ -950,14 +753,14 @@ paths:
       tags:
         - InterestRate
       responses:
-        '200':
+        "200":
           description: Latest interest rate retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InterestRate'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/InterestRate"
+        "500":
+          $ref: "#/components/responses/500"
 
   /interest-rate/initial:
     get:
@@ -966,35 +769,35 @@ paths:
       tags:
         - InterestRate
       responses:
-        '200':
+        "200":
           description: Initial interest rate retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InterestRate'
-        '500':
-          $ref: '#/components/responses/500'
+                $ref: "#/components/schemas/InterestRate"
+        "500":
+          $ref: "#/components/responses/500"
 
 components:
   responses:
-    '400':
+    "400":
       description: Bad request
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BadRequestException'
-    '404':
+            $ref: "#/components/schemas/BadRequestException"
+    "404":
       description: Not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResourceNotFoundException'
-    '500':
+            $ref: "#/components/schemas/ResourceNotFoundException"
+    "500":
       description: Internal server error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/InternalServerException'
+            $ref: "#/components/schemas/InternalServerException"
 
   schemas:
     #entity
@@ -1023,16 +826,14 @@ components:
           birthDate: "2006-08-02"
           monthlySalary: 50000.0
           balance: 2000.0
-          debtList:
-            [2000,4000,5000]
+          debtList: [2000, 4000, 5000]
           overDrafted: false
         - accountId: "shasia-sasha-21sas-dadq"
           firstName: "All"
           lastName: "Smith"
           birthDate: "2005-05-14"
           balance: 2000.0
-          debtList:
-            [ 2000,4000,5000 ]
+          debtList: [2000, 4000, 5000]
           monthlySalary: 6000000.0
           overDrafted: true
 
@@ -1059,6 +860,12 @@ components:
         overDrafted:
           type: boolean
           description: Indicates if the account is overdrafted.
+      required:
+        - firstName
+        - lastName
+        - birthDate
+        - monthlySalary
+        - overDrafted
 
     AccountComponent:
       type: object
@@ -1086,15 +893,14 @@ components:
         transactions:
           type: array
           items:
-            $ref: '#/components/schemas/Transaction'
+            $ref: "#/components/schemas/Transaction"
           description: A list of transactions associated with the account.
         balance:
-          $ref: '#/components/schemas/balance'
+          $ref: "#/components/schemas/balance"
           description: The current balance of the account.
         debt:
-          $ref: '#/components/schemas/debtComponent'
+          $ref: "#/components/schemas/debtComponent"
           description: The current debt of the account
-
 
     balance:
       type: object
@@ -1149,7 +955,7 @@ components:
         transaction:
           type: array
           items:
-            $ref: '#/components/schemas/Transaction'
+            $ref: "#/components/schemas/Transaction"
       required:
         - reason
         - idTransferGroup
@@ -1171,7 +977,7 @@ components:
           format: double
           description: The amount of the transaction.
         account:
-            $ref: '#/components/schemas/AccountComponent'
+          $ref: "#/components/schemas/AccountComponent"
         transactionDateTime:
           type: string
           format: date-time
@@ -1180,9 +986,9 @@ components:
           type: string
           description: reason of the transaction(description)
         transfer:
-            $ref: '#/components/schemas/Transfer'
+          $ref: "#/components/schemas/Transfer"
         transactionCategory:
-            $ref: '#/components/schemas/TransactionCategory'
+          $ref: "#/components/schemas/TransactionCategory"
       required:
         - transactionType
         - amount
@@ -1219,7 +1025,7 @@ components:
       properties:
         idDebt:
           type: string
-          description:  id of the debt.
+          description: id of the debt.
         amount:
           type: number
           format: double
@@ -1230,7 +1036,7 @@ components:
           description: The date and time when the debt was incurred.
         idAccount:
           type: string
-          description:  idaccount associated with this debt.
+          description: idaccount associated with this debt.
         idInterestRate:
           type: string
           description: idinterest rate associated with this debt.
@@ -1243,7 +1049,7 @@ components:
       properties:
         idDebt:
           type: string
-          description:  id of the debt.
+          description: id of the debt.
         amount:
           type: number
           format: double
@@ -1251,9 +1057,9 @@ components:
           type: string
           format: date-time
         account:
-            $ref: '#/components/schemas/accounts'
+          $ref: "#/components/schemas/accounts"
         interestRate:
-            $ref: '#/components/schemas/InterestRate'
+          $ref: "#/components/schemas/InterestRate"
 
     TransactionComponent:
       type: object
@@ -1268,15 +1074,15 @@ components:
         amount:
           type: number
           format: double
-        reason: 
+        reason:
           type: string
           description: reason of the transaction(description)
         account:
-          $ref: '#/components/schemas/accounts'
+          $ref: "#/components/schemas/accounts"
         transfer:
-          $ref: '#/components/schemas/Transfer'
+          $ref: "#/components/schemas/Transfer"
         transactionCategory:
-          $ref: '#/components/schemas/TransactionCategory'
+          $ref: "#/components/schemas/TransactionCategory"
 
     TransferComponent:
       type: object
@@ -1293,9 +1099,9 @@ components:
           type: string
           description: reason of the transfer(description)
         accountDebit:
-          $ref: '#/components/schemas/AccountComponent'
+          $ref: "#/components/schemas/AccountComponent"
         accountCredit:
-          $ref: '#/components/schemas/AccountComponent'
+          $ref: "#/components/schemas/AccountComponent"
 
     TransferGroupComponent:
       type: object
@@ -1310,9 +1116,9 @@ components:
           format: date-time
         label:
           type: string
-        transfers: 
+        transfers:
           type: array
-          $ref: '#/components/schemas/TransferComponent'
+          $ref: "#/components/schemas/TransferComponent"
 
     TransferBodyComponent:
       type: object
@@ -1384,7 +1190,6 @@ components:
         - debit
         - balance
 
-
     Exception:
       type: object
       properties:
@@ -1394,19 +1199,19 @@ components:
           type: string
     BadRequestException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: BadRequestException
         message: Bad request
     ResourceNotFoundException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: ResourceNotFoundException
         message: Resource of type <T> identified by <I> not found
     InternalServerException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: InternalServerException
         message: Unexpected error
