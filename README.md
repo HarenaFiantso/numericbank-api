@@ -18,3 +18,6 @@ This repository contains a project developed by IT Students for an exam, the app
 - STD22070 (H2)
 - STD22076 (H2)
 - STD22086 (H2)
+
+![](doc/MCD.png)
+![](doc/MLD.png)
